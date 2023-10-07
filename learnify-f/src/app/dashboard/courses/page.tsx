@@ -133,7 +133,7 @@ export default function Page() {
                                             </Link>
 
                                             <Link
-                                                href={`/courses/enrollments/${course.id}`}
+                                                href={`/dashboard/courses/${course.id}/enrollments/`}
                                                 className="text-green-500"><button className="bg-green-500 py-1 px-3 text-white rounded-sm">Enrollments</button>
                                             </Link>
                                         </td>

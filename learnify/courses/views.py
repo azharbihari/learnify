@@ -6,6 +6,11 @@ from rest_framework.response import Response
 from courses.models import Course
 from modules.models import Module
 from courses.serializers import CourseSerializer, ModuleSerializer
+from enrollments.models import Enrollment
+from enrollments.serializers import EnrollmentSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
 
 
 class CourseListCreateView(generics.ListCreateAPIView):
@@ -27,23 +32,47 @@ class CourseRetrieveUpdateDestroyAPIViewView(generics.RetrieveUpdateDestroyAPIVi
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = self.request.user
+        is_enrolled = Enrollment.objects.filter(
+            student=user, course=instance).exists()
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        data['is_enrolled'] = is_enrolled
 
-class ModuleListByCourseView(generics.ListAPIView):
-    serializer_class = ModuleSerializer
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class ModuleListByCourseView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        self.course = get_object_or_404(Course, pk=self.kwargs['pk'])
-        return Module.objects.filter(course=self.course)
+    def get(self, request, pk, format=None):
+        course = get_object_or_404(Course, pk=pk)
+        modules = Module.objects.filter(course=course)
+        serializer = ModuleSerializer(modules, many=True)
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-
-        response = {
-            'course': CourseSerializer(self.course).data,
+        response_data = {
+            'course': CourseSerializer(course).data,
             'modules': serializer.data
         }
 
-        return Response(response)
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+class EnrollmentListByCourseView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk, format=None):
+        course = get_object_or_404(Course, pk=pk)
+        enrollments = Enrollment.objects.filter(course=course)
+        serializer = EnrollmentSerializer(enrollments, many=True)
+
+        response_data = {
+            'course': CourseSerializer(course).data,
+            'enrollments': serializer.data
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)

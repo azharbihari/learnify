@@ -4,6 +4,9 @@ from lessons.models import Lesson
 from lessons.serializers import LessonSerializer, LessonCreateSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework.response import Response
+from enrollments.models import Enrollment
 
 
 class LessonListView(generics.ListAPIView):
@@ -29,6 +32,19 @@ class LessonDetailView(generics.RetrieveAPIView):
     serializer_class = LessonSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        lesson = self.get_object()
+        user = self.request.user
+        course = lesson.module.course
+        is_enrolled = Enrollment.objects.filter(
+            student=user, course=course).exists()
+
+        if is_enrolled:
+            return super().get(request, *args, **kwargs)
+        else:
+            message = "You are not enrolled in this course."
+            return Response({"message": message}, status=status.HTTP_403_FORBIDDEN)
 
 
 class LessonUpdateView(generics.UpdateAPIView):

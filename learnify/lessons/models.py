@@ -7,7 +7,8 @@ class Lesson(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True, max_length=255)
     content = models.TextField()
-    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    module = models.ForeignKey(
+        Module, on_delete=models.CASCADE, related_name="lessons")
     is_published = models.BooleanField(default=False)
     video_url = models.URLField(blank=True)
     duration = models.PositiveIntegerField(blank=True, null=True)

@@ -37,6 +37,10 @@ export default function DashboardLayout({
               <li>
                 <Link href="/dashboard/lessons" className="hover:text-blue-500 text-black text-lg">Lessons</Link>
               </li>
+
+              <li>
+                <Link href="/dashboard/enrollments" className="hover:text-blue-500 text-black text-lg">Enrollments</Link>
+              </li>
             </ul>
           </div>
           <div className="col-span-7">

@@ -7,6 +7,8 @@ import InputField from '@/components/InputField';
 import TextareaField from '@/components/TextareaField';
 import CheckboxField from '@/components/CheckboxField';
 import SelectField from '@/components/SelectField';
+import { Editor } from '@tinymce/tinymce-react';
+
 
 export default function LessonCreatePage() {
     const [loading, setLoading] = useState<boolean>(false);
@@ -110,13 +112,13 @@ export default function LessonCreatePage() {
                         onChange={handleChange}
                     />
 
-                    <TextareaField
+                    {/* <TextareaField
                         label="Content"
                         id="content"
                         name="content"
                         value={lesson.content}
                         onChange={handleChange}
-                    />
+                    /> */}
 
                     <CheckboxField
                         label="Published"
@@ -144,7 +146,29 @@ export default function LessonCreatePage() {
                         onChange={handleChange}
                     />
 
-                    <div className="flex items-center justify-between">
+
+                    <Editor
+                        apiKey="1q8smyaegq5p6dz4obllk652frzcv1iq4he2u6gexq2huoav"
+                        textareaName="content"
+                        value={lesson.content}
+                        initialValue="<p>This is the initial content of the editor.</p>"
+                        onEditorChange={(content) => setLesson({ ...lesson, content })}
+                        init={{
+                            height: 500,
+                            menubar: false,
+                            plugins: [
+                                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                            ],
+                            toolbar: 'undo redo | blocks | ' +
+                                'bold italic forecolor | alignleft aligncenter ' +
+                                'alignright alignjustify | bullist numlist outdent indent | ' +
+                                'removeformat | help',
+                            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                        }}
+                    />
+                    <div className="flex items-center justify-between mt-2">
                         <button
                             className="bg-pink-600 hover:bg-pink-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             type="submit"

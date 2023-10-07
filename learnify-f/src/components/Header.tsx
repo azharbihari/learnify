@@ -37,6 +37,11 @@ export default function Header() {
                             </li>
 
                             <li>
+                                <Link href="/courses" className="text-white hover:text-blue-300 transition duration-300">My Courses</Link>
+                            </li>
+
+
+                            <li>
                                 <button
                                     className="btn btn-primary btn-sm"
                                     onClick={handleLogout}

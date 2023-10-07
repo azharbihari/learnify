@@ -17,15 +17,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Course',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=200)),
                 ('description', models.TextField()),
                 ('slug', models.SlugField(blank=True, max_length=255, unique=True)),
                 ('start_date', models.DateField()),
                 ('end_date', models.DateField()),
                 ('is_published', models.BooleanField(default=False)),
-                ('instructor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='courses', to=settings.AUTH_USER_MODEL)),
-                ('students', models.ManyToManyField(related_name='enrolled_courses', to=settings.AUTH_USER_MODEL)),
+                ('instructor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='courses', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

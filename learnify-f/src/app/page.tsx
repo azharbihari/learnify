@@ -42,9 +42,9 @@ export default function Page() {
     <div className="container mx-auto my-4">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
         {courses.map((course) => (
-          <div key={course.id}>
+          <Link href={`/courses/${course.id}`} key={course.id} className="hover:text-blue-500 text-black text-lg">
             <CourseCard course={course} />
-          </div>
+          </Link>
         ))}
       </div>
     </div>

@@ -13,7 +13,9 @@ class Course(models.Model):
 
     instructor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='courses')
-    students = models.ManyToManyField(User, related_name='enrolled_courses')
+
+    students = models.ManyToManyField(
+        User, through="enrollments.Enrollment", through_fields=("course", "student"))
 
     is_published = models.BooleanField(default=False)
 

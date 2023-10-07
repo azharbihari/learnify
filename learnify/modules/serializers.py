@@ -1,8 +1,21 @@
 from rest_framework import serializers
 from modules.models import Module
+from courses.models import Course
 from authentications.serializers import UserSerializer
-from courses.serializers import CourseSerializer
 from lessons.models import Lesson
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    instructor = UserSerializer(read_only=True)
+    students = UserSerializer(many=True, read_only=True)
+    number_of_modules = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+    def get_number_of_modules(self, obj):
+        return Module.objects.filter(course=obj).count()
 
 
 class ModuleSerializer(serializers.ModelSerializer):
